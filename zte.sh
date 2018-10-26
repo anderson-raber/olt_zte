@@ -48,12 +48,22 @@ do
 ###### entrar na pasta da porta PON
 cd  $pasta/PON_"$porta_pon" || return
 
+#########################################################################
+#									#
+#	NECESSARIO AJUSTAR OS DADOS ENTRE sed s/ //			#
+#									#
+#########################################################################
+
+
 ###### remover caracteres
 echo "Removendo caracteres inuteis..."
-cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
-cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
-cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
-cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
+cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/
+
+// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" 		#apos sed s/ pressione ctrl+v+ctrl+m 2x
+cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/
+// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data" 		#apos sed s/ pressione ctrl+v+ctrl+m
+cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	#apos sed s/ pressione ctrl+v+ctrl+H
+cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	#apos sed s/ pressione ctrl+v+ctrl+H 2x
 
 ##### remover linhas inuteis
 echo "Removendo linhas inuteis..."
