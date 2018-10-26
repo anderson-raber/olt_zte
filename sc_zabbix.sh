@@ -1,16 +1,16 @@
 #!/bin/bash
 #como eu separo o banco do front uso dois endereços distintos.
-zabbix_server=143.255.92.203						#IP Servidor Zabbix
-URL='http://143.255.92.201/zabbix/api_jsonrpc.php'  #URL da api zabbix
-pasta=/home/anderson/olt_zte_sarandi				#Pasta onde foram criadas a estrutura des portas PON
+zabbix_server=x.x.x.x						#IP Servidor Zabbix
+URL='http://x.x.x.x/zabbix/api_jsonrpc.php'  #URL da api zabbix
+pasta=						#Pasta onde foram criadas a estrutura des portas PON
 data=$(date +%Y-%m-%d)								#data
-n_pon=1												#numero de portas, altere conforme a necessidade
+n_pon=16									#numero de portas, altere conforme a necessidade
 
 HEADER='Content-Type:application/json'
 
-USER="anderson.raber"								#Usuario zabbix
-PASS="Anderson19"									#senha
-grupo="Cliente OLT" 								#nome do grupo que serão colocados os clientes				
+USER="user"								#Usuario zabbix
+PASS="senha"									#senha
+grupo="nome_grupo" 								#nome do grupo que serão colocados os clientes				
 
 autenticacao()
 {

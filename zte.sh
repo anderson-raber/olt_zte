@@ -1,10 +1,10 @@
 #!/bin/bash
 
-user=yotta				#login olt
-senha=vcdsFGHJK6543 			#senha olt
-host=172.31.255.2 			#ip da OLT
+user=					#login olt
+senha=		 			#senha olt
+host=		 			#ip da OLT
 data=$(date +%Y-%m-%d) 				
-pasta=/home/anderson/olt_zte_sarandi 	#pasta de destino dos arquivos
+pasta=				 	#pasta de destino dos arquivos
 n_slot=2				#quantidade de slots de placas na olt
 n_pon=16 				#numero porstas pon na olt
 num_onu=128 				#numero maximo de clientes por porta
