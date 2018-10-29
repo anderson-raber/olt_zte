@@ -125,28 +125,28 @@ busca_id_grupo()
     curl -s -X POST -H "$HEADER" -d "$JSON" "$URL" | cut -d '"' -f10 
 }
 
-echo "Iniciando"
+#echo "Iniciando"
 TOKEN=$(autenticacao)
-echo "token $TOKEN "
+#echo "token $TOKEN "
 grupo=$(criar_grupo)
-echo "Grupo $grupo"
+#echo "Grupo $grupo"
 id_grupo=$(busca_id_grupo)
-echo "id grupo $id_grupo"
+#echo "id grupo $id_grupo"
 id_template=$(busca_id_template)
-echo "id template $id_template"
+#echo "id template $id_template"
 
 
-for porta_pon in $(seq $n_pon);						#le a quantidade de portas da olt
+for porta_pon in $(seq 3);						#le a quantidade de portas da olt
 do
-	echo "Entrando na pasta PON_$porta_pon"
+	echo "[$data $hora] Entrando na pasta PON_$porta_pon" >> log_zabbix_sender.log
 	cd $pasta/PON_$porta_pon || return
 
 while read cliente 									#ler arquivo de clientes ativos
 do
 	echo $'\n'
-	echo "lendo arquivo"
-	echo "$cliente"
-	echo "$pasta"/PON_"$porta_pon"/"$cliente"'_'"$data"
+	echo "[$data $hora] lendo arquivo" >> log_zabbix_sender.log
+	echo "[$data $hora] $cliente" >> log_zabbix_sender.log
+	echo "[$data $hora] $pasta"/PON_"$porta_pon"/"$cliente"'_'"$data" >> log_zabbix_sender.log
 		sinal_onu2=$(grep "up" "$pasta"/PON_"$porta_pon"/"$cliente"'_'"$data" | cut -d':' -f2)		#filtra sinl ONU
 		sinal_olt2=$(grep "down" "$pasta"/PON_"$porta_pon"/"$cliente"'_'"$data" | cut -d':' -f3)		#filtra sinal OLT
 	echo "sinal onu cliente $cliente"
@@ -154,15 +154,17 @@ do
 		sinal_onu=$(echo "$sinal_onu2" | cut -c1-7)
 
 host=$cliente
-echo "Host $host "
-echo "sinal olt $sinal_olt"
-echo "sinal onu $sinal_onu"								#recebe o nome do cliente
+#echo "Host $host "
+#echo "sinal olt $sinal_olt"
+#echo "sinal onu $sinal_onu"								#recebe o nome do cliente
 
 criar_hosts
-
-zabbix_sender -z $zabbix_server -s "$host" -k sinal.olt -o "$sinal_olt" 				#envia para o zabbix
-zabbix_sender -z $zabbix_server -s "$host" -k sinal.onu -o "$sinal_onu" 
+echo "[$data $hora]" >> log_zabbix_sender.log
+zabbix_sender -z $zabbix_server -s "$host" -k sinal.olt -o "$sinal_olt" >> log_zabbix_sender.log	#envia para o zabbix
+echo "[$data $hora]" >> log_zabbix_sender.log
+zabbix_sender -z $zabbix_server -s "$host" -k sinal.onu -o "$sinal_onu" >> log_zabbix_sender.log
 
 done < clientes.txt 								#recebe o arquivo para leitura dos clientes 
 done
+
 
