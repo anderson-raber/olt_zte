@@ -15,21 +15,18 @@ num_onu=128 				#numero maximo de clientes por porta
 #
 ##########################################
 
-#echo "data = $data"
 cd $pasta || return
 echo "Entrando na Pasta $pasta"
-
-#limpar arquivo de clientes
-echo "Limpando arquivo de clientes..."
-echo -n > clientes.txt
 
 #for slot_olt in $(seq $n_slot); 	#descomentar se houver mais de um slot de portas
 #do					#descomentar se houver mais de um slot de portas
 for porta_pon in $(seq $n_pon); 	#for para as postar da olt
 do
+echo "Limpando arquivo de clientes..."
+echo -n > $pasta/PON_$porta_pon/clientes.txt
 for cli_id in $(seq $num_onu);		#for para os clientes da porta
 do
-	echo "Processando: Porta = $porta_pon / cliente = $cli_id";
+	echo "[$data $hora] Processando: Porta = $porta_pon / cliente = $cli_id" >> log_zte.log
 	(
 		echo "$user";
 		sleep 1;
@@ -48,38 +45,39 @@ do
 ###### entrar na pasta da porta PON
 cd  $pasta/PON_"$porta_pon" || return
 
+###### remover caracteres
+echo "[$data $hora] Removendo caracteres inuteis..." >> log_zte.log
 #########################################################################
 #									#
-#	NECESSARIO AJUSTAR OS DADOS ENTRE sed s/"(AQUI)"//		#
-#				sem aspas				#
+#	NECESSARIO AJUSTAR OS DADOS ENTRE sed s/ //			#
+#									#
 #########################################################################
+cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/
 
-
-###### remover caracteres
-echo "Removendo caracteres inuteis..."
-cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" 	#apos sed s/ pressione ctrl+v+ctrl+m 2x
-cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data" 	#apos sed s/ pressione ctrl+v+ctrl+m
-cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"		#apos sed s/ pressione ctrl+v+ctrl+H
-cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"		#apos sed s/ pressione ctrl+v+ctrl+H 2x
+// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+m 2x
+cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/
+// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+m
+cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+H
+cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+H 2x
 
 ##### remover linhas inuteis
-echo "Removendo linhas inuteis..."
+echo "[$data $hora] Removendo linhas inuteis..." >> log_zte.log
 sed -i 1,13d cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
 sed -i 17,20d cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
 sed -i 18,20d cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
 sed -i 23d cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
 
 #remove arquivo antigo com caracteres
-echo "Removendo arquivo..."
+echo "[$data $hora] Removendo arquivo..." >> log_zte.log
 rm 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"
 
 #procura o nome do cliente para renomaer o arquivo
-echo "Renomeando arquivo..."
+echo "[$data $hora] Renomeando o arquivo..." >> log_zte.log
 nome_cliente=$(grep "Name:" cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | tr -s ' ' | cut -d: -f2 | sed 's/ //')
 mv  cliente_"$porta_pon"'_'"$cli_id"'_'"$data" "$nome_cliente"'_'"$data"
 
 #colocando todos os clientes dentro de um arquivo
-echo "Atualizando arquivo de nomes...$nome_cliente"
+echo "[$data $hora] Atualizando arquivo de nomes...$nome_cliente" >> log_zte.log
 echo "$nome_cliente"
 if [ "$nome_cliente" != '' ];then
 	echo "$nome_cliente" >> "$pasta"/PON_"$porta_pon"/clientes.txt
@@ -91,6 +89,7 @@ fi
 cd $pasta || return
 
 done
-done
+done 
+echo "[$data $hora] TERMINANDO..." >> log_zte.log
 #done				#descomentar se houver mais de um slot de placas
 
