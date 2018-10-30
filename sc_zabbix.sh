@@ -136,7 +136,7 @@ id_template=$(busca_id_template)
 #echo "id template $id_template"
 
 
-for porta_pon in $(seq 3);						#le a quantidade de portas da olt
+for porta_pon in $(seq $n_pon);						#le a quantidade de portas da olt
 do
 	echo "[$data $hora] Entrando na pasta PON_$porta_pon" >> log_zabbix_sender.log
 	cd $pasta/PON_$porta_pon || return
