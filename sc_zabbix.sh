@@ -149,7 +149,7 @@ do
 	echo "[$data $hora] $pasta"/PON_"$porta_pon"/"$cliente"'_'"$data" >> log_zabbix_sender.log
 		sinal_onu2=$(grep "up" "$pasta"/PON_"$porta_pon"/"$cliente"'_'"$data" | cut -d':' -f2)		#filtra sinl ONU
 		sinal_olt2=$(grep "down" "$pasta"/PON_"$porta_pon"/"$cliente"'_'"$data" | cut -d':' -f3)		#filtra sinal OLT
-	echo "sinal onu cliente $cliente"
+	#echo "sinal onu cliente $cliente"
 		sinal_olt=$(echo "$sinal_olt2" | cut -c1-7) 
 		sinal_onu=$(echo "$sinal_onu2" | cut -c1-7)
 
