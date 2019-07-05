@@ -50,15 +50,16 @@ echo "[$data $hora] Removendo caracteres inuteis..." >> log_zte.log
 #########################################################################
 #									#
 #	NECESSARIO AJUSTAR OS DADOS ENTRE sed s/ //			#
-#									#
+#	DEVE FICAR ASSIM:						#
+#	sed s/^M^M// PRIMEIRA LINHA					#
+#	sed s/^M// SEGUNDA LINHA					#
+#	sed s/^H// TERCEIRA LINHA					#
+#	sed s/^H^H// QUARTA LINHA					#
 #########################################################################
-cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/
-
-// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+m 2x
-cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/
-// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+m
-cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+H
-cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+H 2x
+cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+m 2x
+cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+m
+cat cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+H
+cat 2cliente_"$porta_pon"'_'"$cli_id"'_'"$data" | sed s/// > cliente_"$porta_pon"'_'"$cli_id"'_'"$data"	 #apos sed s/ pressione ctrl+v+ctrl+H 2x
 
 ##### remover linhas inuteis
 echo "[$data $hora] Removendo linhas inuteis..." >> log_zte.log
